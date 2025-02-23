@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Divyalator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #800000; /* Light Maroon */
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .slideshow-container {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .slides {
+            display: none;
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .fade {
+            animation: fadeEffect 1.5s ease-in-out;
+        }
+
+        @keyframes fadeEffect {
+            from { opacity: 0.4; }
+            to { opacity: 1; }
+        }
+
+        .start-btn {
+            background-color: white;
+            color: #800000;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .start-btn:hover {
+            background-color: #ffcccc;
+        }
+
+        .question-container {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .question {
+            margin-bottom: 10px;
+        }
+
+        .question button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: white;
+            color: #800000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .question button:hover {
+            background-color: #ffcccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome to Divyalator</h1>
+        <p>A mathematically accurate way to know your chances.</p>
+        <p>Keep choosing the options that happened with you in a single day.</p>
+
+        <div class="slideshow-container">
+            <img class="slides fade" src="dddddd.png" alt="Slide 1">
+            <img class="slides fade" src="d.png" alt="Slide 2">
+        </div>
+
+        <button class="start-btn" id="start-button" onclick="startDivyalator()">Start</button>
+
+        <div id="question-container" class="question-container"></div>
+    </div>
+
+    <script>
+        let slideIndex = 0;
+        function showSlides() {
+            let slides = document.getElementsByClassName("slides");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1; }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 2000);
+        }
+        showSlides();
+
+        const questions = [
+            { text: "How many times in the day did you get ignored by Divya?", options: ["Never", "Sometimes", "A single time", "Every time she saw you"], values: [17.5, 13.125, 8.75, 4.375] },
+            { text: "What was Divya's response on seeing you?", options: ["Her cheeks turned red", "Waved her hands with a smile", "No expression", "Went in for a handshake"], values: [17.5, 13.125, 8.75, 4.375] },
+            { text: "How much time did she spend with you in the day?", options: ["Complete day", "Half day", "Less than an hour", "Did not meet"], values: [10, 7.5, 5, 2.5] },
+            { text: "Did she talk to the person you consider to be your opponent?", options: ["She didn't talk to him but did to me", "She did but for a little time", "She spent a good amount of time with him", "She ignored me when he came"], values: [17.5, 13.125, 8.75, 4.375] },
+            { text: "What was her max smile intensity when she talked with you?", options: ["Covered her smile with her hand", "Normal", "No smile"], values: [10, 6.67, 3.33] },
+            { text: "What things did she do while talking with you?", options: ["Slapped", "Called you pagal or gadhe", "Aapko tameez nhi hai with a smile", "Aapko tameez nhi hai with anger"], values: [17.5, 13.125, 8.75, 4.375] },
+            { text: "Did she share her tiffin with you?", options: ["Yes", "No"], values: [10, 5] }
+        ];
+
+        let currentQuestionIndex = 0;
+        let sum = 0;
+
+        function startDivyalator() {
+            document.getElementById("start-button").style.display = "none";
+            currentQuestionIndex = 0;
+            sum = 0;
+            document.getElementById("question-container").innerHTML = "";
+            showNextQuestion();
+        }
+
+        function showNextQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                document.getElementById("question-container").innerHTML = `<p>Your final percentage: ${sum}%</p>`;
+                return;
+            }
+
+            let container = document.getElementById("question-container");
+            container.innerHTML = "";
+
+            let q = questions[currentQuestionIndex];
+            let div = document.createElement("div");
+            div.className = "question";
+            div.innerHTML = `<p>${q.text}</p>` + q.options.map((opt, i) => 
+                `<button onclick='nextQuestion(${q.values[i]})'>${opt}</button>`
+            ).join("");
+            container.appendChild(div);
+        }
+
+        function nextQuestion(value) {
+            sum += value;
+            currentQuestionIndex++;
+            showNextQuestion();
+        }
+    </script>
+
+</body>
+</html>
